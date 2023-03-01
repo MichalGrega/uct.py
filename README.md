@@ -1,4 +1,4 @@
-🙌
+:raised_hands:
 # uct.py
 Python module for parsing and working with UCT-DEF grid models. Contains classes for grid elements:
 * **Node** (##N)
@@ -49,6 +49,6 @@ Grid(Nodes: 19600; Lines: 23868; Transformers: 3993; Regulations: 2845; Paramete
 <br/>
 
 ## Classes
-
+:notebook_with_decorative_cover:
 `Sub(**kwargs)`\
 Helper

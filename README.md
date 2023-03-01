@@ -50,5 +50,36 @@ Grid(Nodes: 19600; Lines: 23868; Transformers: 3993; Regulations: 2845; Paramete
 
 ## Classes
 :notebook_with_decorative_cover:
-`Sub(**kwargs)`\
-Helper
+### `Grid(uct_file_path)`
+The main class that contains all grid elements read from the uct file.\
+*uct_file_path* has to conform to the UCT naming or else an exception is raised.
+#### Attributes:
+- `Grid.file -> str` - uct file path passed during class initialization is stored here.
+- `Grid.filename -> Sub` - object containing parsed uct file name parts as attributes
+
+| Attribute | Description | Accepted format/values |
+|:----------| ---------------|:-----|
+| `.year -> str` | year of the scenario | YYYY |
+| `.month -> str` | month of the scenario | MM |
+| `.day -> str` | day of the scenario | DD |
+| `.hour -> str` | hour of the scenario | HH |
+| `.minute -> str` | minute of the scenario | MM |
+| `.type -> str` | uct process type |FO, SN, RE, LR, 00 - 24 |
+| `.week_day -> str` | week day index | 1 - 7
+| `.area -> str`| area code from uct filename | keys of `countries` dictionary|
+|`.version -> str` | uct file version | 0 - 9
+
+:notebook_with_decorative_cover:
+### `Sub(**kwargs)`
+Helper class to create an arbitrary object based on passed keyword arguments.
+
+Example:
+```
+>> object = Sub(name = "John", surname = "Wick")
+>>> object
+Sub(name='John', surname='Wick')
+>>> object.name
+'John'
+>>> object.surname
+'Wick'
+```

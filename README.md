@@ -20,6 +20,8 @@ For UCT-DEF directives (##) definition visit following link:\
 <br/>
 
 ## Initialization
+❗ Module needs [dataclasses](https://pypi.org/project/dataclasses/) installed for Python < 3.6
+
 To use the module import it to your script. The best way is to import just the ***Grid*** class:
 ```
 from uct import Grid
@@ -120,6 +122,56 @@ Class that holds several properties that group grid elements by their correspond
 ♻ `Area.uct(trim: bool = False) -> str` - returns uct string for ##Z block of the area.
 
 ### 📚 `Node()`
+Dataclass for holding parameters of nodes (buses).
+All arguments are optional which means you can create an empty instance of a node.
+```
+>>> bus = Node()
+>>> print(bus)
+Node(code=None, name=None, status=None, node_type=None, reference_voltage=None, p_load=None, q_load=None, pg=None, qg=None, pg_min=None, pg_max=None, qg_min=None, qg_max=None, static_of_primary_control=None, primary_control_PN=None, sk3=None, x_to_r=None, area=None, pslfId=None)
+```
+And asign attributes afterwards:
+```
+>>> bus = Node()
+>>> bus.code = "bus uct code"
+>>> bus
+Node(code='bus uct code', name=None, status=None, node_type=None, reference_voltage=None, p_load=None, q_load=None, pg=None, qg=None, pg_min=None, pg_max=None, qg_min=None, qg_max=None, static_of_primary_control=None, primary_control_PN=None, sk3=None, x_to_r=None, plant_type=None, area=None, pslfId=None)
+```
+Or you can specify all or only some of them during initialization.
+
+|Arguments/attributes|UCT parameter|
+|:---|:---|
+|`code: str = None`|Node (code)|
+|`name: str = None`|Node (geographical name)|
+|`status: int = None`|Status: 0 = real, 1 = equivalent|
+|`node_type: int = None`|Node type code (0 = P and Q constant (PQ node); 1 = Q and 9 constant, 2 = P and U constant (PU node), 3 = U and 0 constant (global slack node, only one in the whole network))|
+|`reference_voltage: float = None`|Voltage (reference value, 0 not allowed) (kV)|
+|`p_load: float = None`|Active load (MW)|
+|`q_load: float = None`|Reactive load (MVar)|
+|`pg: float = None`|Active power generation (MW)|
+|`qg: float = None`|Reactive power generation (MVar)|
+|`pg_min: float = None`|Minimum permissible generation (MW)|
+|`pg_max: float = None`|Maximum permissible generation (MW)|
+|`qg_min: float = None`|Minimum permissible generation (MVar)|
+|`qg_max: float = None`|Maximum permissible generation (MVar)|
+|`static_of_primary_control: float = None`|Static of primary control (%)|
+|`primary_control_PN: float = None`|Nominal power for primary control (MW)|
+|`sk3: float = None`|Three phase short circuit power (MVA) **o|
+|`x_to_r: float = None`|X/R ratio ()|
+|`plant_type: str = None`|Power plant type (H: hydro, N: nuclear, L: lignite, C: hard coal, G: gas, O: oil, W: wind, F: further)|
+|`area: str = None`|Area ISO code|
+|`pslfId: int = None`|PSLF node id|
+
+Other attributes:
+▶ `Node.grid -> Grid` reference to the Grid instance where the node belongs. Default value is *None*. If the grid is initialized, it is set to the same instance.
+
+#### Properties
+◼ `Node.voltage -> int` - returns voltage of the node based on the UCT voltage definition.\
+◼ `Node.id -> str` - returns id of the node which is basically equal to `Node.code`
+
+#### Methods
+♻ `Node.load_uct(UctText: str)` - loads Node parameters from uct text of the node.\
+♻ `Node.load_from_regex_dictionary(regex_dictionary: dict)` - loads Node parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Node.load_uct()` method.\
+♻ `Node.uct(trim: bool = False) - str` - returns uct text of the node. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Line()`
 

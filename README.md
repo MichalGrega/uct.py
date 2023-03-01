@@ -1,5 +1,5 @@
+🙌
 # uct.py
-:raised_hands:
 Python module for parsing and working with UCT-DEF grid models. Contains classes for grid elements:
 * **Node** (##N)
 * **Line** (##L)

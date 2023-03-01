@@ -85,9 +85,18 @@ Sub(area='UX', day='06', hour='06', minute='30', month='02', type='FO', version=
 >>> model_object.not_read.keys()
 dict_keys(['Node', 'Line', 'Regulation', 'Transformer', 'Parameter', 'Schedule'])
 ```
-▶ `Grid.nodes -> dict` - dictionary of [Node](#📚-node) type objects organized as *Node.id: Node*.\
-▶ `Grid.lines -> dict` - dictionary of [Line](#📚-line) type objects organized as *Line.id: Line*.\
-▶ `Grid.transformers -> dict` - dictionary of [Transformer](#📚-transformer) type objects organized as *Transformer.id: Transformer*.\
+▶ `Grid.nodes -> dict` - dictionary of [Node](#-node) type objects organized as *Node.id: Node*.\
+▶ `Grid.lines -> dict` - dictionary of [Line](#-line) type objects organized as *Line.id: Line*.\
+▶ `Grid.transformers -> dict` - dictionary of [Transformer](#-transformer) type objects organized as *Transformer.id: Transformer*.\
+▶ `Grid.regulations -> dict` - dictionary of [Regulation](#-regulation) type objects organized as *Regulation.id: Regulation*.\
+▶ `Grid.parameters -> dict` - dictionary of [Parameter](#-parameter) type objects organized as *Parameter.id: Parameter*.\
+▶ `Grid.schedules -> dict` - dictionary of [Schedule](#-schedule) type objects organized as *schedule.id: schedule*.\
+
+#### Properties
+◼ `Grid.date -> datetime.datetime` - date timestamp created from Grid.filename attributes.\
+◼ `Grid.uct(trim: bool = False, C: bool = True, N: bool = True, L: bool = True, T: bool = True, E: bool = True) -> str` - creates valid uct text of the Grid object.
+* `trim` - if true, tracing spaces are stripped.
+* `C`, `N`, `L`, `T`, `E` - if true, directive blocks are exported (C - comments, N - nodes, L - lines, T - transformers including regulations and special parameters, E - schedules)
 
 ### 📚 `Area(area_code: str, grid_instance: Grid)`
 
@@ -96,6 +105,12 @@ dict_keys(['Node', 'Line', 'Regulation', 'Transformer', 'Parameter', 'Schedule']
 ### 📚 `Line()`
 
 ### 📚 `Transformer()`
+
+### 📚 `Regulation()`
+
+### 📚 `Parameter()`
+
+### 📚 `Schedule()`
 
 ### 📚 `Sub(**kwargs)` :notebook_with_decorative_cover:
 Helper class to create an arbitrary object based on passed keyword arguments.

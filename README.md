@@ -163,7 +163,16 @@ Or you can specify all or only some of them during initialization.
 
 Other attributes:\
 ▶ `Node.grid -> Grid` reference to the Grid instance where the node belongs. Default value is *None*. If the grid is initialized, it is set to the same instance.
-
+```
+>>> md = Grid(r"c:\Folder_With_Uct_Files\Uct_file.uct")
+>>> md
+Grid(Nodes: 19600; Lines: 23868; Transformers: 3993; Regulations: 2845; Parameters: 2; Schedules: 3)
+>>> nd = list(md.nodes.values())[0]
+>>> nd.grid
+Grid(Nodes: 19600; Lines: 23868; Transformers: 3993; Regulations: 2845; Parameters: 2; Schedules: 3)
+>>> md == nd.grid
+True
+```
 #### Properties
 ◼ `Node.voltage -> int` - returns voltage of the node based on the UCT voltage definition.\
 ◼ `Node.id -> str` - returns id of the node which is basically equal to `Node.code`

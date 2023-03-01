@@ -161,7 +161,7 @@ Or you can specify all or only some of them during initialization.
 |`area: str = None`|Area ISO code|
 |`pslfId: int = None`|PSLF node id|
 
-Other attributes:
+Other attributes:\
 ▶ `Node.grid -> Grid` reference to the Grid instance where the node belongs. Default value is *None*. If the grid is initialized, it is set to the same instance.
 
 #### Properties

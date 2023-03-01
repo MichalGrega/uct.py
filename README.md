@@ -74,7 +74,7 @@ Sub(area='UX', day='06', hour='06', minute='30', month='02', type='FO', version=
 ▶ `Grid.uct_text_original -> str` - text of the uct file as a whole without any changes.\
 ▶ `Grid.uct_version -> str` - uct format version identification ( ❕ not file version ❕ )\
 ▶ `Grid.comments -> list` - list of all comment blocks from uct file. If uct file contain multiple comment blocks directives (##C), list will contain multiple items.\
-▶ `Grid.areas -> dict` - dictionary of [Area](#`area(area_code:-str,-grid_instance:-Grid)`) type objects with area code as key.
+▶ `Grid.areas -> dict` - dictionary of [Area](#-areaarea_code-str-grid_instance-grid) type objects with area code as key.
 ```
 >>> md.areas
 {'ME': Area(ME, Nodes: 52, Lines: 75, Transformers: 12, NP: 224.4877),

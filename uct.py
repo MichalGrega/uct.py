@@ -149,14 +149,14 @@ class Area:
         return f"Area({self.code}, Nodes: {len(self.nodes) if self.nodes else 0}, Lines: {len(self.lines) if self.lines else 0}, Transformers: {len(self.transformers) if self.transformers else 0}, NP: {self.np:.4f})"
 
     @property
-    def np(self):
+    def np(self) -> float:
         return -1*sum([node.pg for node in self.nodes.values()]) - sum([node.p_load for node in self.nodes.values()])
     
-    def uct(self, trim: bool = False):
+    def uct(self, trim: bool = False) -> str:
         return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes.values()]) + "\n"
 
 class Element():
-    grid = None
+    grid: Grid = None
     def load_uct(self, UctText: str):
         regex = regex[self.__class__.__name__.lower()]
         rgx = re.compile(regex)
@@ -174,7 +174,7 @@ class Element():
             except:
                 setattr(self, name, None)
     
-    def uct(self, trim: bool = False):
+    def uct(self, trim: bool = False) -> str:
         # if self.__class__.__name__ == "Node" and self.code == "XSK_KP51": pdb.set_trace()
         output = " ". join([f"{conv(getattr(self, att), length)}" for att, length in uct_export[self.__class__.__name__].items()]) + " "
         return output.strip() + " " if trim else output
@@ -190,33 +190,33 @@ class Connecting_Element:
 
 @dataclass()
 class Node(Element):
-    code: str = None
-    name: str = None
-    status: int = None
-    node_type: int = None
-    reference_voltage: float = None
-    p_load: float = None
-    q_load: float = None
-    pg: float = None
-    qg: float = None
-    pg_min: float = None
-    pg_max: float = None
-    qg_min: float = None
-    qg_max: float = None
-    static_of_primary_control: float = None
-    primary_control_PN: float = None
-    sk3: float = None
-    x_to_r: float = None
-    plant_type: str = field(repr=False, default=None)
+    code: str = None #Node (code)
+    name: str = None #Node (geographical name)
+    status: int = None #Status: 0 = real, 1 = equivalent
+    node_type: int = None #Node type code (0 = P and Q constant (PQ node); 1 = Q and 9 constant, 2 = P and U constant (PU node), 3 = U and 0 constant (global slack node, only one in the whole network))
+    reference_voltage: float = None #Voltage (reference value, 0 not allowed) (kV)
+    p_load: float = None #Active load (MW)
+    q_load: float = None #Reactive load (MVar)
+    pg: float = None #Active power generation (MW)
+    qg: float = None #Reactive power generation (MVar)
+    pg_min: float = None #Minimum permissible generation (MW) *o
+    pg_max: float = None #Maximum permissible generation (MW) *o
+    qg_min: float = None #Minimum permissible generation (MVar) *o
+    qg_max: float = None #Maximum permissible generation (MVar) *o
+    static_of_primary_control: float = None #Static of primary control (%) *o
+    primary_control_PN: float = None #Nominal power for primary control (MW) *o
+    sk3: float = None #Three phase short circuit power (MVA) **o
+    x_to_r: float = None #X/R ratio () **o
+    plant_type: str = None #Power plant type *o (H: hydro, N: nuclear, L: lignite, C: hard coal, G: gas, O: oil, W: wind, F: further)
     area: str = None
     pslfId: int = None
 
     @property
-    def voltage(self):
+    def voltage(self) -> int:
         return uct_voltage[int(self.code[6])]
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self.code
 
 @dataclass

@@ -16,7 +16,7 @@ class Grid:
                 "filename", "not_read"]
     
     
-    def __init__(self, uct_file_path):
+    def __init__(self, uct_file_path: str):
         self.file = uct_file_path
         # self.name_parts = self.__get_name_parts__()
         self.filename = Sub(**self.__get_name_parts__())
@@ -45,7 +45,7 @@ class Grid:
         else:
             return name_rgx_match.groupdict()
     @property        
-    def date(self):
+    def date(self) -> datetime.datetime:
         return datetime.datetime(int(self.filename.year),
                                  int(self.filename.month),
                                  int(self.filename.day),
@@ -104,7 +104,7 @@ class Grid:
     def __repr__(self) -> str:
         return "Grid(%s)" %"; ".join([f"{ky + 's'}: {len(getattr(self,ky.lower() + 's'))}" for ky in uct_export])
     
-    def uct(self, trim: bool = False, C: bool = True, N: bool = True, L: bool = True, T: bool = True, E: bool = True):
+    def uct(self, trim: bool = False, C: bool = True, N: bool = True, L: bool = True, T: bool = True, E: bool = True) -> str:
         output = ""
         if C:
             output = f"##C {self.uct_version}\n" + "\n".join(self.comments)
@@ -130,19 +130,19 @@ class Area:
         self.grid = grid_instance
 
     @property
-    def nodes(self):
+    def nodes(self) -> dict:
         return {key: item for key, item in self.grid.nodes.items() if item.area == self.code}
 
     @property
-    def lines(self):
+    def lines(self) -> dict:
         return {key: item for key, item in self.grid.lines.items() if self.grid.nodes[item.node1].area == self.code or self.grid.nodes[item.node2].area == self.code}
     
     @property
-    def transformers(self):
+    def transformers(self) -> dict:
         return {key: item for key, item in self.grid.transformers.items() if self.grid.nodes[item.node1].area == self.code or self.grid.nodes[item.node2].area == self.code}
     
     @property
-    def schedules(self):
+    def schedules(self) -> dict:
         return {key: item for key, item in self.grid.schedules.items() if item.country1 == self.code or item.country2 == self.code}
 
     def __repr__(self) -> str:
@@ -336,7 +336,7 @@ functions = {
     "int": int
 }
 
-uct_voltage = [750, 380, 220, 150, 120, 11, 70, 27, 330, 500]
+uct_voltage = [750, 380, 220, 150, 120, 110, 70, 27, 330, 500]
 
 countries = {
     "AL" : {
@@ -766,7 +766,7 @@ countries = {
         "code2" :  None,
         "cgm" :  False,
         "pslf_code" :  40,
-        "pslf_name" :  "X-Nodes		   - 40 - X",
+        "pslf_name" :  "X-Nodes",
     },
 }
 

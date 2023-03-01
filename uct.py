@@ -86,6 +86,7 @@ class Grid:
                 if element.__class__.__name__ == "Transformer" and element.id in self.regulations:
                     element.regulation = self.regulations[element.id]
                     if element.id in [parameter.transformer_id for parameter in self.parameters.values()]: element.parameters.extend([parameter for parameter in self.parameters.values() if parameter.transformer_id == element.id])
+                element.grid = self
                 elements[element.id] = element
                 counter += 1
 
@@ -155,6 +156,7 @@ class Area:
         return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes.values()]) + "\n"
 
 class Element():
+    grid = None
     def load_uct(self, UctText: str):
         regex = regex[self.__class__.__name__.lower()]
         rgx = re.compile(regex)
@@ -176,6 +178,15 @@ class Element():
         # if self.__class__.__name__ == "Node" and self.code == "XSK_KP51": pdb.set_trace()
         output = " ". join([f"{conv(getattr(self, att), length)}" for att, length in uct_export[self.__class__.__name__].items()]) + " "
         return output.strip() + " " if trim else output
+
+class Connecting_Element:
+    @property
+    def oNode1(self):
+        return self.grid.nodes[self.node1]
+    
+    @property
+    def oNode2(self):
+        return self.grid.nodes[self.node2]
 
 @dataclass()
 class Node(Element):
@@ -209,7 +220,7 @@ class Node(Element):
         return self.code
 
 @dataclass
-class Line(Element):
+class Line(Element, Connecting_Element):
     node1: str = None
     node2: str = None
     order_code: str = None
@@ -225,7 +236,7 @@ class Line(Element):
         return f"{self.node1:<8} {self.node2:<8} {self.order_code:<1}"
 
 @dataclass
-class Transformer(Element):
+class Transformer(Element, Connecting_Element):
     node1: str = None
     node2: str = None
     order_code: str = None

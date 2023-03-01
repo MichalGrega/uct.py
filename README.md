@@ -49,13 +49,12 @@ Grid(Nodes: 19600; Lines: 23868; Transformers: 3993; Regulations: 2845; Paramete
 <br/>
 
 ## Classes
-:notebook_with_decorative_cover:
-### `Grid(uct_file_path)`
+### `Grid(uct_file_path)` :notebook_with_decorative_cover:
 The main class that contains all grid elements read from the uct file.\
 *uct_file_path* has to conform to the UCT naming or else an exception is raised.
 #### Attributes:
 - `Grid.file -> str` - uct file path passed during class initialization is stored here.
-- `Grid.filename -> Sub` - object containing parsed uct file name parts as attributes
+- `Grid.filename -> Sub` - object containing parsed uct file name parts as attributes:
 
 | Attribute | Description | Accepted format/values |
 |:----------| ---------------|:-----|
@@ -69,8 +68,7 @@ The main class that contains all grid elements read from the uct file.\
 | `.area -> str`| area code from uct filename | keys of `countries` dictionary|
 |`.version -> str` | uct file version | 0 - 9
 
-:notebook_with_decorative_cover:
-### `Sub(**kwargs)`
+### `Sub(**kwargs)` :notebook_with_decorative_cover:
 Helper class to create an arbitrary object based on passed keyword arguments.
 
 Example:

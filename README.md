@@ -50,7 +50,7 @@ Grid(Nodes: 19600; Lines: 23868; Transformers: 3993; Regulations: 2845; Paramete
 ## Classes
 ### 📚 `Grid(uct_file_path)`
 The main class that contains all grid elements read from the uct file.\
-*uct_file_path* has to conform to the UCT naming or else an exception is raised.
+Base name of the *uct_file_path* has to conform to the UCT naming or else an exception is raised.
 #### Attributes: 
 ▶ `Grid.file -> str` - uct file path passed during class initialization is stored here.\
 ▶ `Grid.filename -> Sub` - object containing parsed uct file name parts as attributes (accepts only formats/values):
@@ -93,12 +93,31 @@ dict_keys(['Node', 'Line', 'Regulation', 'Transformer', 'Parameter', 'Schedule']
 ▶ `Grid.schedules -> dict` - dictionary of [Schedule](#-schedule) type objects organized as *schedule.id: schedule*.\
 
 #### Properties
-◼ `Grid.date -> datetime.datetime` - date timestamp created from Grid.filename attributes.\
-◼ `Grid.uct(trim: bool = False, C: bool = True, N: bool = True, L: bool = True, T: bool = True, E: bool = True) -> str` - creates valid uct text of the Grid object.
+◼ `Grid.date -> datetime.datetime` - date timestamp created from Grid.filename attributes.
+
+#### Methods
+♻ `Grid.uct(trim: bool = False, C: bool = True, N: bool = True, L: bool = True, T: bool = True, E: bool = True) -> str` - creates valid uct text of the Grid object.
 * `trim` - if true, tracing spaces are stripped.
 * `C`, `N`, `L`, `T`, `E` - if true, directive blocks are exported (C - comments, N - nodes, L - lines, T - transformers including regulations and special parameters, E - schedules)
 
 ### 📚 `Area(area_code: str, grid_instance: Grid)`
+Class that holds several properties that group grid elements by their corresponding area.
+* `area_code: str` has to be in the same format that is used in uct ##Z directive: ##Z(area_code).For example ##ZBE.
+* `grid_instance: Grid` is a Grid object instance that holds elements to be sorted.
+
+#### Attributes
+▶ `Area.code -> str` - area 2 character ISO code of a country to which the area belongs. `area_code` parameter is passed to this attribute.\
+▶ `Area.grid -> Grid` - Grid object instance containing elements to be sorted passed down from `grid_instance` parameter.
+
+#### Properties
+◼ `Area.nodes -> dict` - returns dictionary of [Node](#-node) type objects *{Node.id: Node}* that have `Node.area` attribute equal to `Area.code` i. e. nodes belonging to the area.\
+◼ `Area.lines -> dict` - returns dictionary of [Line](#-line) type objects *{Line.id: Line}* of which at least one node belongs to the area (`Area.code in [Line.node1, Line.node2]`)\
+◼ `Area.transformers -> dict` - returns dictionary of [Transformer](#-transformer) type objects *{Transformer.id: Line}* of which at least one node belongs to the area (`Area.code in [Transformer.node1, Transformer.node2]`)\
+◼ `Area.schedules -> dict` - returns dictionary of [Schedule](#-schedule) type objects *{Schedule.id: Line}* of which at least one country belongs to the area (`Area.code in [Schedule.country1, Schedule.country2]`)\
+◼ `Area.np -> float` - returns a net position of the area calculated as sum of generation - sum of load.
+
+#### Methods
+♻ `Area.uct(trim: bool = False) -> str` - returns uct string for ##Z block of the area.
 
 ### 📚 `Node()`
 

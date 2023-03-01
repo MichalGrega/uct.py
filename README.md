@@ -26,7 +26,7 @@ To expose all classes, functions and variables in the module use:
 ```
 from uct import *
 ```
-Note: To import the module in form of **uct.py** file must be located in a folder included in the pythons [sys.path](https://docs.python.org/3/library/sys.html).\
+Note: To import the module in form of **uct.py** file it has to be located in a folder included in the python's [sys.path](https://docs.python.org/3/library/sys.html).\
 If your folder is not included, append the `sys.path` and then import the module:
 ```
 import sys

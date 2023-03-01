@@ -78,11 +78,24 @@ Sub(area='UX', day='06', hour='06', minute='30', month='02', type='FO', version=
 ```
 >>> md.areas
 {'ME': Area(ME, Nodes: 52, Lines: 75, Transformers: 12, NP: 224.4877),
-'AL': Area(AL, Nodes: 160, Lines: 192, Transformers: 29, NP: 270.2495)
+'AL': Area(AL, Nodes: 160, Lines: 192, Transformers: 29, NP: 270.2495), ... }
 ```
-▶ `Grid.areas -> dict`
+▶ `Grid.not_read -> dict` - dictionary of lines from uct file that were note recognized during parsing. Keys are object names corresponding to the element blocks (*Node, Line, Transformer, Regulation, Parameter, Schedule*). Values are lists of strings (text lines from the file). If everything was read correctly, the dictionary is empty. Only keys of not read elements are present.
+```
+>>> model_object.not_read.keys()
+dict_keys(['Node', 'Line', 'Regulation', 'Transformer', 'Parameter', 'Schedule'])
+```
+▶ `Grid.nodes -> dict` - dictionary of [Node](#📚-node) type objects organized as *Node.id: Node*.\
+▶ `Grid.lines -> dict` - dictionary of [Line](#📚-line) type objects organized as *Line.id: Line*.\
+▶ `Grid.transformers -> dict` - dictionary of [Transformer](#📚-transformer) type objects organized as *Transformer.id: Transformer*.\
 
 ### 📚 `Area(area_code: str, grid_instance: Grid)`
+
+### 📚 `Node()`
+
+### 📚 `Line()`
+
+### 📚 `Transformer()`
 
 ### 📚 `Sub(**kwargs)` :notebook_with_decorative_cover:
 Helper class to create an arbitrary object based on passed keyword arguments.

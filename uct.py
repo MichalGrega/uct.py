@@ -69,9 +69,9 @@ class Grid:
         class_name = element_class().__class__.__name__
         for match in rgx[class_name + 's'].finditer(self.uct_text_original):
             
-            if "area" in match.groupdict():
-                area_code = match.groupdict()["area"]
-                self.areas[area_code] = Area(area_code, self)
+            if "_area" in match.groupdict():
+                area_code = match.groupdict()["_area"]
+                if area_code: self.areas[area_code] = Area(area_code, self)
             
             # print(match.groupdict()["elements"])
             number_of_elements = len(re.findall("^\S+.*?$", match.groupdict()["elements"], re.MULTILINE))
@@ -82,11 +82,12 @@ class Grid:
             for el_match in rgx[class_name].finditer(match.groupdict()["elements"]):
                 element = element_class()
                 element.load_from_regex_dictionary(el_match.groupdict())
-                if element.__class__.__name__ == "Node": element.area = area_code
+                if element.__class__.__name__ == "Node": element._area = area_code
                 if element.__class__.__name__ == "Transformer" and element.id in self.regulations:
                     element.regulation = self.regulations[element.id]
                     if element.id in [parameter.transformer_id for parameter in self.parameters.values()]: element.parameters.extend([parameter for parameter in self.parameters.values() if parameter.transformer_id == element.id])
                 element.grid = self
+                if hasattr(element,"area") and element.area not in self.areas: self.areas[element.area] = Area(element.area, self)
                 elements[element.id] = element
                 counter += 1
 
@@ -208,7 +209,7 @@ class Node(Element):
     sk3: float = None #Three phase short circuit power (MVA) **o
     x_to_r: float = None #X/R ratio () **o
     plant_type: str = None #Power plant type *o (H: hydro, N: nuclear, L: lignite, C: hard coal, G: gas, O: oil, W: wind, F: further)
-    area: str = None
+    _area: str = None
     pslfId: int = None
 
     @property
@@ -218,6 +219,12 @@ class Node(Element):
     @property
     def id(self) -> str:
         return self.code
+
+    @property
+    def area(self):
+        if not self._area:
+            self._area = [code for code, country in countries.items() if country["node"] == self.code[0]][0]
+        return self._area
 
 @dataclass
 class Line(Element, Connecting_Element):
@@ -789,16 +796,17 @@ file_regex_parts = [
 
 rgx = {
   "file": re.compile("".join(file_regex_parts)),
-  "comment": re.compile(r"##C\s*?(?P<version>\S.*?\S)?\s*?[\r\n]{1,2}(?P<text>(?:.*?[\r\n]{1,2})+?)(?=##|\Z)"),
-  "Nodes": re.compile(r"##\s?Z\s?(?P<area>\w{2})[\r\n]{1,2}(?P<elements>(?:.*?[\r\n])+?)(?=##|\Z)"),
+  "comment": re.compile(r"##C\s*?(?P<version>\S.*?\S)?\s*?[\r\n]{1,2}(?P<text>(?:.*?[\r\n]?)+?)(?=##|\Z)"),
+#   "Nodes": re.compile(r"##\s?Z\s?(?P<area>\w{2})[\r\n]{1,2}(?P<elements>(?:.*?[\r\n]?)+?)(?=##|\Z)"),
+  "Nodes": re.compile(r"##\s*?(?:N|Z\s*?(?P<_area>\w{2}))\s*?[\r\n](?!\s*?(?=##|\Z))(?P<elements>.*?)(?=##|\Z)", re.DOTALL),
   "Node": re.compile(r"(?P<code__str>.{8}) (?P<name__str>.{12}) (?P<status__int>.{1}) (?P<node_type__int>.{1}) (?P<reference_voltage__float>.{6}) (?P<p_load__float>.{7}) (?P<q_load__float>.{7}) (?P<pg__float>.{7}) (?P<qg__float>.{7})(?: (?P<pg_min__float>.{7}))?(?: (?P<pg_max__float>.{7}))?(?: (?P<qg_min__float>.{7}))?(?: (?P<qg_max__float>.{7}))?(?: (?P<static_of_primary_control__float>.{5}))?(?: (?P<primary_control_PN__float>.{7}))?(?: (?P<sk3__float>.{7}))?(?: (?P<x_to_r__float>.{7}))?(?: (?P<plant_type__str>.{1}))?"),
-  "Lines": re.compile(r"##L\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n])*?)(?=##|\Z)"),
+  "Lines": re.compile(r"##L\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n]?)*?)(?=##|\Z)"),
   "Line": re.compile(r"(?P<node1__str>.{8}) (?P<node2__str>.{8}) (?P<order_code__str>.{1}) (?P<status__int>.{1}) (?P<r__float>.{6}) (?P<x__float>.{6}) (?P<b__float>.{8}) (?P<i_max__int>.{6})(?: (?P<name__str>.{12}))?"),
-  "Transformers": re.compile(r"##T\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n])*?)(?=##|\Z)"),
+  "Transformers": re.compile(r"##T\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n]?)*?)(?=##|\Z)"),
   "Transformer": re.compile(r"(?P<node1__str>.{8}) (?P<node2__str>.{8}) (?P<order_code__str>.{1}) (?P<status__int>.{1}) (?P<v1__float>.{5}) (?P<v2__float>.{5}) (?P<sn__float>.{5}) (?P<r__float>.{6}) (?P<x__float>.{6}) (?P<b__float>.{8}) (?P<g__float>.{6}) (?P<i_max__int>.{6})(?: (?P<name__str>.{12}))?"),
-  "Regulations": re.compile(r"##R\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n])*?)(?=##|\Z)"),
+  "Regulations": re.compile(r"##R\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n]?)*?)(?=##|\Z)"),
   "Regulation": re.compile(r"(?P<node1__str>.{8}) (?P<node2__str>.{8}) (?P<order_code__str>.{1}) (?P<phase_delta_u__float>.{5}) (?P<phase_taps__int>.{2}) (?P<phase_tap__int>.{3})(?: (?P<phase_u__float>.{5}))?(?: (?P<angle_delta_u__float>.{5}))?(?: (?P<angle_phi__float>.{5}))?(?: (?P<angle_taps__int>.{2}))?(?: (?P<angle_tap__int>.{3}))?(?: (?P<angle_p__float>.{5}))?(?: (?P<angle_type__str>.{4}))?"),
-  "Parameters": re.compile(r"##TT\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n])*?)(?=##|\Z)"),
+  "Parameters": re.compile(r"##TT\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n]?)*?)(?=##|\Z)"),
   "Parameter": re.compile(r"(?P<node1__str>.{8}) (?P<node2__str>.{8}) (?P<order_code__str>.{1}) (?P<tap__int>.{3}) (?P<r__float>.{6}) (?P<x__float>.{6}) (?P<delta_u__float>.{5}) (?P<alfa__float>.{5})"),
   "Schedules": re.compile(r"##E\s*?[\r\n]{1,2}(?P<elements>(?:.*?[\r\n]?)*?)(?=##|\Z)"),
   "Schedule": re.compile(r"(?P<country1__str>.{2}) (?P<country2__str>.{2}) (?P<schedule__float>.{7})(?: (?P<comments__str>.{12}))?")

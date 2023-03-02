@@ -163,6 +163,7 @@ Or you can specify all or only some of them during initialization.
 
 Other attributes:\
 ▶ `Node.grid -> Grid` reference to the Grid instance where the node belongs. Default value is *None*. If the grid is initialized, it is set to the same instance.
+
 ```
 >>> md = Grid(r"c:\Folder_With_Uct_Files\Uct_file.uct")
 >>> md
@@ -174,7 +175,7 @@ Grid(Nodes: 19600; Lines: 23868; Transformers: 3993; Regulations: 2845; Paramete
 True
 ```
 #### Properties
-◼ `Node.voltage -> int` - returns voltage of the node based on the UCT voltage definition.\
+◼ `Node.voltage -> int` - returns voltage of the node based on the UCT voltage definition (according to 6th node code character).\
 ◼ `Node.id -> str` - returns id of the node which is basically equal to `Node.code`
 
 #### Methods
@@ -183,6 +184,31 @@ True
 ♻ `Node.uct(trim: bool = False) - str` - returns uct text of the node. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Line()`
+Dataclass for parameters of lines. All arguments are optional which means you can create an empty instance exactly the same as with [nodes](#-node).
+
+|Arguments/attributes|UCT parameter|
+|:---|:---|
+|`node1: str = None`|Node 1 (code)|
+|`node2: str = None`|Node 2 (code)|
+|`order_code: str = None`|Order code (1,2, 3 ... 9, A, B, C ... Z)|
+|`status: int = None`|Status (0, 1,2 or 7, 8, 9)|
+|`r: float = None`|Resistance R (Q)|
+|`x: float = None`|Reactance X (Q)|
+|`b: float = None`|Susceptance B (pS)|
+|`i_max: int = None`|Current limit I (A)|
+|`name: str = None`|Element name (optional)|
+
+Other attributes:\
+▶ `Line.grid -> Grid` reference to the Grid instance where the line belongs. Exactly the same as with [nodes](#-node).
+
+#### Properties
+◼ `Line.id -> str` - returns id of the line which is equal to *"{node1} {node2} {order code}"* of the line.\
+◼ `Line.pslfId -> str` - returns formatted string representing GE PSLF identification for the line equal to *"{node1.pslfId} {node2.pslfId} {order code} 1"*.
+
+#### Methods
+♻ `Line.load_uct(UctText: str)` - loads Line parameters from uct text of the line.\
+♻ `Line.load_from_regex_dictionary(regex_dictionary: dict)` - loads Line parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Line.load_uct()` method.\
+♻ `Line.uct(trim: bool = False) - str` - returns uct text of the line. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Transformer()`
 

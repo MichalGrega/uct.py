@@ -236,15 +236,15 @@ class Node(Element):
 
 @dataclass
 class Line(Element, Connecting_Element):
-    node1: str = None
-    node2: str = None
-    order_code: str = None
-    status: int = None
-    r: float = None
-    x: float = None
-    b: float = None
-    i_max: int = None
-    name: str = None
+    node1: str = None #Node 1 (code)
+    node2: str = None #Node 2 (code)
+    order_code: str = None #Order code (1,2, 3 ... 9, A, B, C ... Z)
+    status: int = None #Status (0, 1,2 or 7, 8, 9)
+    r: float = None #Resistance R (Q)
+    x: float = None #Reactance X (Q)
+    b: float = None #Susceptance B (pS)
+    i_max: int = None #Current limit I (A)
+    name: str = None #Element name (optional) ***
 
     @property
     def id(self):

@@ -19,8 +19,11 @@ For UCT-DEF directives (##) definition visit following link:\
 
 <br/>
 
-## Initialization
+## Prerequisites
 ❗ Module needs [dataclasses](https://pypi.org/project/dataclasses/) installed for Python < 3.6
+
+
+## Initialization
 
 To use the module import it to your script. The best way is to import just the ***Grid*** class:
 ```
@@ -204,6 +207,8 @@ Other attributes:\
 #### Properties
 ◼ `Line.id -> str` - returns id of the line which is equal to *"{node1} {node2} {order code}"* of the line.\
 ◼ `Line.pslfId -> str` - returns formatted string representing GE PSLF identification for the line equal to *"{node1.pslfId} {node2.pslfId} {order code} 1"*.
+◼ `Line.oNode1 -> Node` - returns [Node](#-node) object for node1 of the line.
+◼ `Line.oNode1 -> Node` - returns [Node](#-node) object for node2 of the line.
 
 #### Methods
 ♻ `Line.load_uct(UctText: str)` - loads Line parameters from uct text of the line.\
@@ -211,6 +216,38 @@ Other attributes:\
 ♻ `Line.uct(trim: bool = False) - str` - returns uct text of the line. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Transformer()`
+Dataclass for parameters of transformers. All arguments are optional which means you can create an empty instance exactly the same as with [nodes](#-node).
+
+|Arguments/attributes|UCT parameter|
+|:---|:---|
+|node1: str = None|Node 1 ( code) (non-regulated winding)|
+|node2: str = None|Node 2 ( code) (regulated winding)|
+|order_code: str = None|Order code (1,2, 3 ... 9, A,B,C ... Z)|
+|status: int = None|Status (0, 1 or 8, 9) **|
+|v1: float = None|Rated voltage 1: non-regulated winding (kV)|
+|v2: float = None|Rated voltage 2: regulated winding (kV)|
+|sn: float = None|Nominal power (MVA)|
+|r: float = None|Resistance R (Q) *|
+|x: float = None|Reactance X (Q) * ***|
+|b: float = None|Susceptance B (pS) *|
+|g: float = None|Conductance G (pS) *|
+|i_max: int = None|Current limit I (A) *|
+|name: str = None|Element name (optional) |
+|regulation: any = None|[Regulation](#-regulation) object for the transformer|
+|parameters: list = []|List of [special parameter objects](#-regulation) for the transformer|
+
+Other attributes:\
+▶ `Transformer.grid -> Grid` reference to the Grid instance where the transformer belongs. Exactly the same as with [nodes](#-node).
+
+#### Properties
+◼ `Transformer.id -> str` - returns id of the transformer which is equal to *"{node1} {node2} {order code}"* of the transformer.\
+◼ `Transformer.oNode1 -> Node` - returns [Node](#-node) object for node1 of the transformer.
+◼ `Transformer.oNode1 -> Node` - returns [Node](#-node) object for node2 of the transformer.
+
+#### Methods
+♻ `Transformer.load_uct(UctText: str)` - loads Transformer parameters from uct text of the transformer.\
+♻ `Transformer.load_from_regex_dictionary(regex_dictionary: dict)` - loads Transformer parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Transformer.load_uct()` method.\
+♻ `Transformer.uct(trim: bool = False) - str` - returns uct text of the transformer. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Regulation()`
 

@@ -242,7 +242,7 @@ Other attributes:\
 #### Properties
 ◼ `Transformer.id -> str` - returns id of the transformer which is equal to *"{node1} {node2} {order code}"* of the transformer.\
 ◼ `Transformer.oNode1 -> Node` - returns [Node](#-node) object for node1 of the transformer.\
-◼ `Transformer.oNode1 -> Node` - returns [Node](#-node) object for node2 of the transformer.
+◼ `Transformer.oNode2 -> Node` - returns [Node](#-node) object for node2 of the transformer.
 
 #### Methods
 ♻ `Transformer.load_uct(UctText: str)` - loads Transformer parameters from uct text of the transformer.\

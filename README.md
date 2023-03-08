@@ -1,12 +1,12 @@
 :raised_hands:
 # uct.py
 Python module for parsing and working with UCT-DEF grid models. Contains classes for grid elements:
-* **Node** (##N)
-* **Line** (##L)
-* **Transformer** (##T)
-* **Regulation** (##R)
-* **Parameter** (##TT)
-* **Schedule** (##E)
+* [**Node** (##N)](#-node)
+* [**Line** (##L)](#-line)
+* [**Transformer** (##T)](#-transformer)
+* [**Regulation** (##R)](#-regulation)
+* [**Parameter** (##TT)](#-parameter)
+* [**Schedule** (##E)](#-schedule)
 
 Additional classes:
 * **Grid** - main class to contain the whole grid
@@ -250,6 +250,43 @@ Other attributes:\
 ♻ `Transformer.uct(trim: bool = False) - str` - returns uct text of the transformer. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Regulation()`
+Dataclass for parameters of regulation of transformers. All arguments are optional which means you can create an empty instance exactly the same as with [nodes](#-node).
+
+|Arguments/attributes|UCT parameter|
+|:---|:---|
+|node1: str = None|Node 1 (code) (non-regulated winding)|
+|node2: str = None|Node 2 (code) (regulated winding)|
+|order_code: str = None|Order code (1,2, 3 ... 9, A,B,C ... Z)|
+|phase_delta_u: float = None|8u (%)|
+|phase_taps: int = None|n|
+|phase_tap: int = None|n’|
+|phase_u: float = None|U (kV) (optional) ? |
+|angle_delta_u: float = None|8u (%)* |
+|angle_phi: float = None|0 (°)* |
+|angle_taps: int = None|n* |
+|angle_tap: int = None|n’* |
+|angle_p: float = None|P (MW)* (optional) |
+|angle_type: str = None|Type* (ASYM: asymmetrical, SYMM: symmetrical) |
+
+Other attributes:\
+▶ `Regulation.grid -> Grid` reference to the Grid instance where the regulation belongs. Exactly the same as with [nodes](#-node).
+
+#### Properties
+◼ `Regulation.id -> str` - returns id of the regulation which is equal to *"{node1} {node2} {order code}"* of the regulation. It is equal to the id of the corresponding transformer.\
+
+#### Methods
+♻ `Regulation.load_uct(UctText: str)` - loads Regulation parameters from uct text of the regulation.\
+♻ `Regulation.load_from_regex_dictionary(regex_dictionary: dict)` - loads Regulation parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Regulation.load_uct()` method.\
+♻ `Regulation.uct(trim: bool = False) - str` - returns uct text of the regulation. If trim is true, tracing spaces are stripped.
+
+### 📚 `Parameter()`
+
+
+### 📚 `Schedule()`
+
+### 📚 `Sub(**kwargs)` :notebook_with_decorative_cover:
+Helper class to create an arbitrary object based on passed keyword arguments.
+
 
 ### 📚 `Parameter()`
 

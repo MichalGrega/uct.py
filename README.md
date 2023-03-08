@@ -297,7 +297,7 @@ Other attributes:\
 ▶ `Parameter.grid -> Grid` reference to the Grid instance where the parameter belongs. Exactly the same as with [nodes](#-node).
 
 #### Properties
-◼ `Parameter.id -> str` - returns id of the parameter which is equal to *"{node1} {node2} {order code} {tap}"* of the parameter.
+◼ `Parameter.id -> str` - returns id of the parameter which is equal to *"{node1} {node2} {order code} {tap}"* of the parameter.\
 ◼ `Parameter.transformer_id -> str` - returns id of the corresponding trnasformer which is equal to *"{node1} {node2} {order code}"* of the parameter. It is equal to the id of the corresponding transformer.\
 
 #### Methods
@@ -306,6 +306,25 @@ Other attributes:\
 ♻ `Parameter.uct(trim: bool = False) - str` - returns uct text of the parameter. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Schedule()`
+Dataclass for parameters of a scheduled exchange. All arguments are optional which means you can create an empty instance exactly the same as with [nodes](#-node).
+
+|Arguments/attributes|UCT parameter|
+|:---|:---|
+|`country1: str = None`|Country 1 (ISO code)|
+|`country2: str = None`|Country 2 (ISO code)|
+|`schedule: float = None`|P (MW) scheduled active power exchange|
+|`comments: str = None`|Comments (optional)|
+
+Other attributes:\
+▶ `Schedule.grid -> Grid` reference to the Grid instance where the schedule belongs. Exactly the same as with [nodes](#-node).
+
+#### Properties
+◼ `Schedule.id -> str` - returns id of the schedule which is equal to *"{country1} {country2}"* of the schedule.\
+
+#### Methods
+♻ `Schedule.load_uct(UctText: str)` - loads Schedule parameters from uct text of the schedule.\
+♻ `Schedule.load_from_regex_dictionary(regex_dictionary: dict)` - loads Schedule parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Schedule.load_uct()` method.\
+♻ `Schedule.uct(trim: bool = False) - str` - returns uct text of the schedule. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Sub(**kwargs)` :notebook_with_decorative_cover:
 Helper class to create an arbitrary object based on passed keyword arguments.

@@ -220,21 +220,21 @@ Dataclass for parameters of transformers. All arguments are optional which means
 
 |Arguments/attributes|UCT parameter|
 |:---|:---|
-|node1: str = None|Node 1 ( code) (non-regulated winding)|
-|node2: str = None|Node 2 ( code) (regulated winding)|
-|order_code: str = None|Order code (1,2, 3 ... 9, A,B,C ... Z)|
-|status: int = None|Status (0, 1 or 8, 9) **|
-|v1: float = None|Rated voltage 1: non-regulated winding (kV)|
-|v2: float = None|Rated voltage 2: regulated winding (kV)|
-|sn: float = None|Nominal power (MVA)|
-|r: float = None|Resistance R (Q) *|
-|x: float = None|Reactance X (Q) * ***|
-|b: float = None|Susceptance B (pS) *|
-|g: float = None|Conductance G (pS) *|
-|i_max: int = None|Current limit I (A) *|
-|name: str = None|Element name (optional) |
-|regulation: any = None|[Regulation](#-regulation) object for the transformer|
-|parameters: list = []|List of [special parameter objects](#-regulation) for the transformer|
+|`node1: str = None`|Node 1 ( code) (non-regulated winding)|
+|`node2: str = None`|Node 2 ( code) (regulated winding)|
+|`order_code: str = None`|Order code (1,2, 3 ... 9, A,B,C ... Z)|
+|`status: int = None`|Status (0, 1 or 8, 9) **|
+|`v1: float = None`|Rated voltage 1: non-regulated winding (kV)|
+|`v2: float = None`|Rated voltage 2: regulated winding (kV)|
+|`sn: float = None`|Nominal power (MVA)|
+|`r: float = None`|Resistance R (Q) *|
+|`x: float = None`|Reactance X (Q) * ***|
+|`b: float = None`|Susceptance B (pS) *|
+|`g: float = None`|Conductance G (pS) *|
+|`i_max: int = None`|Current limit I (A) *|
+|`name: str = None`|Element name (optional) |
+|`regulation: any = None`|[Regulation](#-regulation) object for the transformer|
+|`parameters: list = []`|List of [special parameter objects](#-regulation) for the transformer|
 
 Other attributes:\
 ▶ `Transformer.grid -> Grid` reference to the Grid instance where the transformer belongs. Exactly the same as with [nodes](#-node).
@@ -254,19 +254,19 @@ Dataclass for parameters of regulation of transformers. All arguments are option
 
 |Arguments/attributes|UCT parameter|
 |:---|:---|
-|node1: str = None|Node 1 (code) (non-regulated winding)|
-|node2: str = None|Node 2 (code) (regulated winding)|
-|order_code: str = None|Order code (1,2, 3 ... 9, A,B,C ... Z)|
-|phase_delta_u: float = None|8u (%)|
-|phase_taps: int = None|n|
-|phase_tap: int = None|n’|
-|phase_u: float = None|U (kV) (optional) ? |
-|angle_delta_u: float = None|8u (%)* |
-|angle_phi: float = None|0 (°)* |
-|angle_taps: int = None|n* |
-|angle_tap: int = None|n’* |
-|angle_p: float = None|P (MW)* (optional) |
-|angle_type: str = None|Type* (ASYM: asymmetrical, SYMM: symmetrical) |
+|`node1: str = None`|Node 1 (code) (non-regulated winding)|
+|`node2: str = None`|Node 2 (code) (regulated winding)|
+|`order_code: str = None`|Order code (1,2, 3 ... 9, A,B,C ... Z)|
+|`phase_delta_u: float = None`|8u (%)|
+|`phase_taps: int = None`|n|
+|`phase_tap: int = None`|n’|
+|`phase_u: float = None`|U (kV) (optional) ? |
+|`angle_delta_u: float = None`|8u (%)* |
+|`angle_phi: float = None`|0 (°)* |
+|`angle_taps: int = None`|n* |
+|`angle_tap: int = None`|n’* |
+|`angle_p: float = None`|P (MW)* (optional) |
+|`angle_type: str = None`|Type* (ASYM: asymmetrical, SYMM: symmetrical) |
 
 Other attributes:\
 ▶ `Regulation.grid -> Grid` reference to the Grid instance where the regulation belongs. Exactly the same as with [nodes](#-node).
@@ -280,15 +280,30 @@ Other attributes:\
 ♻ `Regulation.uct(trim: bool = False) - str` - returns uct text of the regulation. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Parameter()`
+Dataclass for parameters of special Parameter of transformers. All arguments are optional which means you can create an empty instance exactly the same as with [nodes](#-node).
 
+|Arguments/attributes|UCT parameter|
+|:---|:---|
+|`node1: str = None`|Node 1 (code) (non-regulated winding)|
+|`node2: str = None`|Node 2 (code) (regulated winding)|
+|`order_code: str = None`|Order code (1,2, 3 ... 9, A,B,C ... Z)|
+|`tap: int = None`|Tap position (n’)|
+|`r: float = None`|Resistance R at tap n’ (Q)*|
+|`x: float = None`|Reactance X at tap n’ (Q)*|
+|`delta_u: float = None`|Au at tap n’ (%)|
+|`alfa: float = None`|Phase shift angle a at tap n’ (°) (0° for phase regulation)|
 
-### 📚 `Schedule()`
+Other attributes:\
+▶ `Parameter.grid -> Grid` reference to the Grid instance where the parameter belongs. Exactly the same as with [nodes](#-node).
 
-### 📚 `Sub(**kwargs)` :notebook_with_decorative_cover:
-Helper class to create an arbitrary object based on passed keyword arguments.
+#### Properties
+◼ `Parameter.id -> str` - returns id of the parameter which is equal to *"{node1} {node2} {order code} {tap}"* of the parameter.
+◼ `Parameter.transformer_id -> str` - returns id of the corresponding trnasformer which is equal to *"{node1} {node2} {order code}"* of the parameter. It is equal to the id of the corresponding transformer.\
 
-
-### 📚 `Parameter()`
+#### Methods
+♻ `Parameter.load_uct(UctText: str)` - loads Parameter parameters from uct text of the parameter.\
+♻ `Parameter.load_from_regex_dictionary(regex_dictionary: dict)` - loads Parameter parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Parameter.load_uct()` method.\
+♻ `Parameter.uct(trim: bool = False) - str` - returns uct text of the parameter. If trim is true, tracing spaces are stripped.
 
 ### 📚 `Schedule()`
 

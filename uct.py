@@ -194,15 +194,6 @@ class Element():
         output = " ". join([f"{conv(getattr(self, att), length)}" for att, length in uct_export[self.__class__.__name__].items()]) + " "
         return output.strip() + " " if trim else output
 
-class Connecting_Element:
-    @property
-    def oNode1(self):
-        return self.grid.nodes[self.node1]
-    
-    @property
-    def oNode2(self):
-        return self.grid.nodes[self.node2]
-
 @dataclass()
 class Node(Element):
     code: str = None #Node (code)
@@ -234,6 +225,16 @@ class Node(Element):
     def id(self) -> str:
         return self.code
 
+class Connecting_Element:
+    @property
+    def oNode1(self) -> Node:
+        return self.grid.nodes[self.node1]
+    
+    @property
+    def oNode2(self) -> Node:
+        return self.grid.nodes[self.node2]
+
+
 @dataclass
 class Line(Element, Connecting_Element):
     node1: str = None #Node 1 (code)
@@ -259,19 +260,19 @@ class Line(Element, Connecting_Element):
 
 @dataclass
 class Transformer(Element, Connecting_Element):
-    node1: str = None
-    node2: str = None
-    order_code: str = None
-    status: int = None
-    v1: float = None
-    v2: float = None
-    sn: float = None
-    r: float = None
-    x: float = None
-    b: float = None
-    g: float = None
-    i_max: int = None
-    name: str = None
+    node1: str = None #Node 1 ( code) (non-regulated winding)
+    node2: str = None #Node 2 ( code) (regulated winding)
+    order_code: str = None #Order code (1,2, 3 ... 9, A,B,C ... Z)
+    status: int = None #Status (0, 1 or 8, 9) **
+    v1: float = None #Rated voltage 1: non-regulated winding (kV)
+    v2: float = None #Rated voltage 2: regulated winding (kV)
+    sn: float = None #Nominal power (MVA)
+    r: float = None #Resistance R (Q) *
+    x: float = None #Reactance X (Q) * ***
+    b: float = None #Susceptance B (pS) *
+    g: float = None #Conductance G (pS) *
+    i_max: int = None #Current limit I (A) *
+    name: str = None #Element name (optional) 
     regulation: any = None
     parameters: list = field(default_factory=lambda: [])
 
@@ -281,19 +282,19 @@ class Transformer(Element, Connecting_Element):
 
 @dataclass
 class Regulation(Element):
-    node1: str = None
-    node2: str = None
-    order_code: str = None
-    phase_delta_u: float = None
-    phase_taps: int = None
-    phase_tap: int = None
-    phase_u: float = None
-    angle_delta_u: float = None
-    angle_phi: float = None
-    angle_taps: int = None
-    angle_tap: int = None
-    angle_p: float = None
-    angle_type: str = None
+    node1: str = None #Node 1 (code) (non-regulated winding)
+    node2: str = None #Node 2 (code) (regulated winding)
+    order_code: str = None #Order code (1,2, 3 ... 9, A,B,C ... Z)
+    phase_delta_u: float = None #8u (%)
+    phase_taps: int = None #n
+    phase_tap: int = None #n’
+    phase_u: float = None #U (kV) (optional) ? 
+    angle_delta_u: float = None #8u (%)* 
+    angle_phi: float = None #0 (°)* 
+    angle_taps: int = None #n* 
+    angle_tap: int = None #n’* 
+    angle_p: float = None #P (MW)* (optional) 
+    angle_type: str = None #Type* (ASYM: asymmetrical, SYMM: symmetrical) 
 
     @property
     def id(self):
@@ -301,14 +302,14 @@ class Regulation(Element):
 
 @dataclass
 class Parameter(Element):
-    node1: str = None
-    node2: str = None
-    order_code: str = None
-    tap: int = None
-    r: float = None
-    x: float = None
-    delta_u: float = None
-    alfa: float = None
+    node1: str = None #Node 1 (code) (non-regulated winding)
+    node2: str = None #Node 2 (code) (regulated winding)
+    order_code: str = None #Order code (1,2, 3 ... 9, A,B,C ... Z)
+    tap: int = None #Tap position (n’)
+    r: float = None #Resistance R at tap n’ (Q)*
+    x: float = None #Reactance X at tap n’ (Q)*
+    delta_u: float = None #Au at tap n’ (%)
+    alfa: float = None #Phase shift angle a at tap n’ (°) (0° for phase regulation)
 
     @property
     def id(self):
@@ -320,10 +321,10 @@ class Parameter(Element):
 
 @dataclass
 class Schedule(Element):
-    country1: str = None
-    country2: str = None
-    schedule: float = None
-    comments: str = None
+    country1: str = None #Country 1 (ISO code)
+    country2: str = None #Country 2 (ISO code)
+    schedule: float = None #P (MW) scheduled active power exchange
+    comments: str = None #Comments (optional)
     
     @property
     def id(self):

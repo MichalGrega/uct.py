@@ -165,7 +165,7 @@ class Area:
 
     @property
     def np(self) -> float:
-        return -1*sum([node.pg for node in self.nodes.values()]) - sum([node.p_load for node in self.nodes.values()])
+        return -1*sum([node.pg for node in self.nodes.values()]) - sum([node.pl for node in self.nodes.values()])
     
     def uct(self, trim: bool = False) -> str:
         return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes.values()]) + "\n"
@@ -201,8 +201,8 @@ class Node(Element):
     status: int = None #Status: 0 = real, 1 = equivalent
     node_type: int = None #Node type code (0 = P and Q constant (PQ node); 1 = Q and 9 constant, 2 = P and U constant (PU node), 3 = U and 0 constant (global slack node, only one in the whole network))
     reference_voltage: float = None #Voltage (reference value, 0 not allowed) (kV)
-    p_load: float = None #Active load (MW)
-    q_load: float = None #Reactive load (MVar)
+    pl: float = None #Active load (MW)
+    ql: float = None #Reactive load (MVar)
     pg: float = None #Active power generation (MW)
     qg: float = None #Reactive power generation (MVar)
     pg_min: float = None #Minimum permissible generation (MW) *o
@@ -424,7 +424,7 @@ rgx = {
   "file": re.compile("".join(file_regex_parts)),
   "comment": re.compile(r"##C\s*?(?P<version>\S.*?\S)?\s*?[\r\n]{1,2}(?P<text>(?:.*?[\r\n]?)+?)(?=##|\Z)"),
   "Nodes": re.compile(r"##\s*?(?:N|Z\s*?(?P<area>\w{2}))\s*?[\r\n](?!\s*?(?=##|\Z))(?P<elements>.*?)(?=##|\Z)", re.DOTALL),
-  "Node": re.compile(r"(?P<code__str>.{8}) (?P<name__str>.{12}) (?P<status__int>.{1}) (?P<node_type__int>.{1}) (?P<reference_voltage__float>.{6}) (?P<p_load__float>.{7}) (?P<q_load__float>.{7}) (?P<pg__float>.{7}) (?P<qg__float>.{7})(?: (?P<pg_min__float>.{7}))?(?: (?P<pg_max__float>.{7}))?(?: (?P<qg_min__float>.{7}))?(?: (?P<qg_max__float>.{7}))?(?: (?P<static_of_primary_control__float>.{5}))?(?: (?P<primary_control_PN__float>.{7}))?(?: (?P<sk3__float>.{7}))?(?: (?P<x_to_r__float>.{7}))?(?: (?P<plant_type__str>.{1}))?"),
+  "Node": re.compile(r"(?P<code__str>.{8}) (?P<name__str>.{12}) (?P<status__int>.{1}) (?P<node_type__int>.{1}) (?P<reference_voltage__float>.{6}) (?P<pl__float>.{7}) (?P<ql__float>.{7}) (?P<pg__float>.{7}) (?P<qg__float>.{7})(?: (?P<pg_min__float>.{7}))?(?: (?P<pg_max__float>.{7}))?(?: (?P<qg_min__float>.{7}))?(?: (?P<qg_max__float>.{7}))?(?: (?P<static_of_primary_control__float>.{5}))?(?: (?P<primary_control_PN__float>.{7}))?(?: (?P<sk3__float>.{7}))?(?: (?P<x_to_r__float>.{7}))?(?: (?P<plant_type__str>.{1}))?"),
   "Lines": re.compile(r"##\s*?L\s*?[\r\n](?!\s*?(?=##|\Z))(?P<elements>.*?)(?=##|\Z)", re.DOTALL),
   "Line": re.compile(r"(?P<node1__str>.{8}) (?P<node2__str>.{8}) (?P<order_code__str>.{1}) (?P<status__int>.{1}) (?P<r__float>.{6}) (?P<x__float>.{6}) (?P<b__float>.{8}) (?P<i_max__int>.{6})(?: (?P<name__str>.{12}))?"),
   "Transformers": re.compile(r"##\s*?T\s*?[\r\n](?!\s*?(?=##|\Z))(?P<elements>.*?)(?=##|\Z)", re.DOTALL),
@@ -441,7 +441,7 @@ rgx = {
 
 uct_export = {
     "Node": {
-        "code": 8, "name": 12, "status": 1, "node_type": 1, "reference_voltage": 6, "p_load": 7, "q_load": 7, "pg": 7, "qg": 7, "pg_min": 7, "pg_max": 7, "qg_min": 7, "qg_max": 7, "static_of_primary_control": 5, "primary_control_PN": 7, "sk3": 7, "x_to_r": 7, "plant_type": 1
+        "code": 8, "name": 12, "status": 1, "node_type": 1, "reference_voltage": 6, "pl": 7, "ql": 7, "pg": 7, "qg": 7, "pg_min": 7, "pg_max": 7, "qg_min": 7, "qg_max": 7, "static_of_primary_control": 5, "primary_control_PN": 7, "sk3": 7, "x_to_r": 7, "plant_type": 1
     },
     "Line": {
         "node1": 8, "node2": 8, "order_code": 1, "status": 1, "r": 6, "x": 6, "b": 8, "i_max": 6, "name": 12

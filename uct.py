@@ -53,6 +53,10 @@ class Grid:
                                  int(self.filename.minute),
                                  0)
 
+    @property
+    def slack(self) -> list:
+        return [node for node in self.nodes.values() if node.node_type == 3]
+
     def __get_comments__(self):
         # comment_rgx = re.compile(regex["comment"], re.MULTILINE)
         # comment_rgx_match = comment_rgx.finditer(self.uct_text_original)
@@ -156,6 +160,10 @@ class Area:
             nodes.append(line.node1)
             nodes.append(line.node2)
         return {key: item for key, item in self.grid.areas["XX"].nodes.items() if key in nodes}
+
+    @property
+    def slack(self) -> list:
+        return [node for node in self.nodes.values() if node.node_type == 3]
     
     @property
     def xnp(self) -> float:

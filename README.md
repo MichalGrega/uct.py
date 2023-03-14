@@ -130,14 +130,14 @@ All arguments are optional which means you can create an empty instance of a nod
 ```
 >>> bus = Node()
 >>> print(bus)
-Node(code=None, name=None, status=None, node_type=None, reference_voltage=None, p_load=None, q_load=None, pg=None, qg=None, pg_min=None, pg_max=None, qg_min=None, qg_max=None, static_of_primary_control=None, primary_control_PN=None, sk3=None, x_to_r=None, area=None, pslfId=None)
+Node(code=None, name=None, status=None, node_type=None, reference_voltage=None, pl=None, ql=None, pg=None, qg=None, pg_min=None, pg_max=None, qg_min=None, qg_max=None, static_of_primary_control=None, primary_control_PN=None, sk3=None, x_to_r=None, area=None, pslfId=None)
 ```
 And asign attributes afterwards:
 ```
 >>> bus = Node()
 >>> bus.code = "bus uct code"
 >>> bus
-Node(code='bus uct code', name=None, status=None, node_type=None, reference_voltage=None, p_load=None, q_load=None, pg=None, qg=None, pg_min=None, pg_max=None, qg_min=None, qg_max=None, static_of_primary_control=None, primary_control_PN=None, sk3=None, x_to_r=None, plant_type=None, area=None, pslfId=None)
+Node(code='bus uct code', name=None, status=None, node_type=None, reference_voltage=None, pl=None, ql=None, pg=None, qg=None, pg_min=None, pg_max=None, qg_min=None, qg_max=None, static_of_primary_control=None, primary_control_PN=None, sk3=None, x_to_r=None, plant_type=None, area=None, pslfId=None)
 ```
 Or you can specify all or only some of them during initialization.
 
@@ -148,8 +148,8 @@ Or you can specify all or only some of them during initialization.
 |`status: int = None`|Status: 0 = real, 1 = equivalent|
 |`node_type: int = None`|Node type code (0 = P and Q constant (PQ node); 1 = Q and 9 constant, 2 = P and U constant (PU node), 3 = U and 0 constant (global slack node, only one in the whole network))|
 |`reference_voltage: float = None`|Voltage (reference value, 0 not allowed) (kV)|
-|`p_load: float = None`|Active load (MW)|
-|`q_load: float = None`|Reactive load (MVar)|
+|`pl: float = None`|Active load (MW)|
+|`ql: float = None`|Reactive load (MVar)|
 |`pg: float = None`|Active power generation (MW)|
 |`qg: float = None`|Reactive power generation (MVar)|
 |`pg_min: float = None`|Minimum permissible generation (MW)|

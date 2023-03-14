@@ -245,6 +245,14 @@ class Node(Element):
     @property
     def id(self) -> str:
         return self.code
+    
+    @property
+    def lines(self) -> list:
+        return [
+            line
+            for line in self.grid.lines.values()
+            if self.code in [line.node1, line.node2]
+        ]
 
 class Connecting_Element:
     @property

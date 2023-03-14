@@ -185,6 +185,7 @@ True
 #### Properties
 ◼ `Node.voltage -> int` - returns voltage of the node based on the UCT voltage definition (according to 6th node code character).\
 ◼ `Node.id -> str` - returns id of the node which is basically equal to `Node.code`
+◼ `Node.lines -> list` - returns list of `Grid.lines` connected to the Node.
 
 #### Methods
 ♻ `Node.load_uct(UctText: str)` - loads Node parameters from uct text of the node.\

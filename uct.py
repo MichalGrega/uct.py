@@ -147,6 +147,19 @@ class Area:
     @property
     def nodes(self) -> dict:
         return {key: item for key, item in self.grid.nodes.items() if item.area == self.code}
+    
+    @property
+    def xnodes(self) -> dict:
+        lines = self.lines
+        nodes = []
+        for line in lines.values():
+            nodes.append(line.node1)
+            nodes.append(line.node2)
+        return {key: item for key, item in self.grid.areas["XX"].nodes.items() if key in nodes}
+    
+    @property
+    def xnp(self) -> float:
+        return -1*sum([node.pg for node in self.xnodes.values()]) - sum([node.pl for node in self.xnodes.values()])
 
     @property
     def lines(self) -> dict:

@@ -116,10 +116,13 @@ Class that holds several properties that group grid elements by their correspond
 
 #### Properties
 ◼ `Area.nodes -> dict` - returns dictionary of [Node](#-node) type objects *{Node.id: Node}* that have `Node.area` attribute equal to `Area.code` i. e. nodes belonging to the area.\
+◼ `Area.xnodes -> dict` - returns dictionary of [Node](#-node) type objects *{Node.id: Node}* that have `Node.area` attribute equal to *XX* i. e. X-nodes that are connected to the area by at least one line.\
 ◼ `Area.lines -> dict` - returns dictionary of [Line](#-line) type objects *{Line.id: Line}* of which at least one node belongs to the area (`Area.code in [Line.node1, Line.node2]`)\
 ◼ `Area.transformers -> dict` - returns dictionary of [Transformer](#-transformer) type objects *{Transformer.id: Line}* of which at least one node belongs to the area (`Area.code in [Transformer.node1, Transformer.node2]`)\
 ◼ `Area.schedules -> dict` - returns dictionary of [Schedule](#-schedule) type objects *{Schedule.id: Line}* of which at least one country belongs to the area (`Area.code in [Schedule.country1, Schedule.country2]`)\
 ◼ `Area.np -> float` - returns a net position of the area calculated as sum of generation - sum of load.
+◼ `Area.xnp -> float` - returns a net position of the `Area.xnodes` calculated as sum of generation - sum of load.
+
 
 #### Methods
 ♻ `Area.uct(trim: bool = False) -> str` - returns uct string for ##Z block of the area.

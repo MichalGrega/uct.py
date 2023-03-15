@@ -148,45 +148,42 @@ class Area:
         self.code = area_code
         self.grid = grid_instance
 
-    @property
     def nodes(self) -> dict:
         return {key: item for key, item in self.grid.nodes.items() if item.area == self.code}
     
-    @property
     def xnodes(self) -> dict:
-        lines = self.lines
+        lines = self.lines().values()
         nodes = []
-        for line in lines.values():
+        for line in lines:
             nodes.append(line.node1)
             nodes.append(line.node2)
-        return {key: item for key, item in self.grid.areas["XX"].nodes.items() if key in nodes}
+        return {key: item for key, item in self.grid.areas["XX"].nodes().items() if key in nodes}
 
-    @property
     def slack(self) -> list:
-        return [node for node in self.nodes.values() if node.node_type == 3]
+        return [node for node in self.nodes().values() if node.node_type == 3]
     
-    @property
     def xnp(self) -> float:
-        return -1*sum([node.pg for node in self.xnodes.values()]) - sum([node.pl for node in self.xnodes.values()])
+        xnodes = self.xnodes().values()
+        return -1*sum([node.pg for node in xnodes]) - sum([node.pl for node in xnodes])
 
-    @property
     def lines(self) -> dict:
         return {key: item for key, item in self.grid.lines.items() if self.grid.nodes[item.node1].area == self.code or self.grid.nodes[item.node2].area == self.code}
     
-    @property
     def transformers(self) -> dict:
         return {key: item for key, item in self.grid.transformers.items() if self.grid.nodes[item.node1].area == self.code or self.grid.nodes[item.node2].area == self.code}
     
-    @property
     def schedules(self) -> dict:
         return {key: item for key, item in self.grid.schedules.items() if item.country1 == self.code or item.country2 == self.code}
 
     def __repr__(self) -> str:
-        return f"Area({self.code}, Nodes: {len(self.nodes) if self.nodes else 0}, Lines: {len(self.lines) if self.lines else 0}, Transformers: {len(self.transformers) if self.transformers else 0}, NP: {self.np:.4f})"
+        nodes = self.nodes()
+        lines = self.lines()
+        transf = self.transformers()
+        return f"Area({self.code}, Nodes: {len(nodes) if nodes else 0}, Lines: {len(lines) if lines else 0}, Transformers: {len(transf) if transf else 0}, NP: {self.np():.2f}, XNP: {self.xnp():.2f})"
 
-    @property
     def np(self) -> float:
-        return -1*sum([node.pg for node in self.nodes.values()]) - sum([node.pl for node in self.nodes.values()])
+        nodes = self.nodes().values()
+        return -1*sum([node.pg for node in nodes]) - sum([node.pl for node in nodes])
     
     def uct(self, trim: bool = False) -> str:
         return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes.values()]) + "\n"

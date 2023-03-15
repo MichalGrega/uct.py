@@ -162,9 +162,20 @@ class Area:
     def slack(self) -> list:
         return [node for node in self.nodes().values() if node.node_type == 3]
     
-    def xnp(self) -> float:
+    def np(self, exclude_isolated_nodes: bool = False) -> float:
+        nodes = self.nodes().values()
+        if exclude_isolated_nodes:
+            not_isolated_nodes = [node for node in nodes if not node.isolated()]
+            return -1*sum([node.pg for node in not_isolated_nodes]) - sum([node.pl for node in not_isolated_nodes])
+        else:
+            return -1*sum([node.pg for node in nodes]) - sum([node.pl for node in nodes])
+    
+    def xnp(self, exclude_isolated_nodes: bool = False) -> float:
         xnodes = self.xnodes().values()
-        return -1*sum([node.pg for node in xnodes]) - sum([node.pl for node in xnodes])
+        if exclude_isolated_nodes:
+            return -1*sum([node.pg for node in xnodes if not node.isolated()]) - sum([node.pl for node in xnodes if not node.isolated()])
+        else:
+            return -1*sum([node.pg for node in xnodes]) - sum([node.pl for node in xnodes])
 
     def lines(self) -> dict:
         return {key: item for key, item in self.grid.lines.items() if self.grid.nodes[item.node1].area == self.code or self.grid.nodes[item.node2].area == self.code}
@@ -180,10 +191,6 @@ class Area:
         lines = self.lines()
         transf = self.transformers()
         return f"Area({self.code}, Nodes: {len(nodes) if nodes else 0}, Lines: {len(lines) if lines else 0}, Transformers: {len(transf) if transf else 0}, NP: {self.np():.2f}, XNP: {self.xnp():.2f})"
-
-    def np(self) -> float:
-        nodes = self.nodes().values()
-        return -1*sum([node.pg for node in nodes]) - sum([node.pl for node in nodes])
     
     def uct(self, trim: bool = False) -> str:
         return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes.values()]) + "\n"
@@ -250,6 +257,25 @@ class Node(Element):
             for line in self.grid.lines.values()
             if self.code in [line.node1, line.node2]
         ]
+    
+    def transformers(self) -> list:
+        return [
+            transformer
+            for transformer in self.grid.transformers.values()
+            if self.code in [transformer.node1, transformer.node2]
+        ]
+
+    def isolated(self) -> bool:
+        return len([*[
+            line
+            for line in self.lines()
+            if line.status in [0, 1, 2]
+            ], *[
+                    transformer
+                    for transformer in self.transformers()
+                    if transformer.status in [0,1]
+                ]
+            ]) == 0
 
 class Connecting_Element:
     @property

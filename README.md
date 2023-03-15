@@ -122,8 +122,8 @@ Class that holds several properties that group grid elements by their correspond
 ♻ `Area.lines() -> dict` - returns dictionary of [Line](#-line) type objects *{Line.id: Line}* of which at least one node belongs to the area (`Area.code in [Line.node1, Line.node2]`)\
 ♻ `Area.transformers() -> dict` - returns dictionary of [Transformer](#-transformer) type objects *{Transformer.id: Line}* of which at least one node belongs to the area (`Area.code in [Transformer.node1, Transformer.node2]`)\
 ♻ `Area.schedules() -> dict` - returns dictionary of [Schedule](#-schedule) type objects *{Schedule.id: Line}* of which at least one country belongs to the area (`Area.code in [Schedule.country1, Schedule.country2]`)\
-♻ `Area.np() -> float` - returns a net position of the area calculated as sum of generation - sum of load.
-♻ `Area.xnp() -> float` - returns a net position of the `Area.xnodes` calculated as sum of generation - sum of load.
+♻ `Area.np(exclude_isolated_nodes: bool = False) -> float` - returns a net position of the area calculated as sum of generation - sum of load. If *exclude_isolated_nodes* is *True*, np is calculated without isolated nodes, but this can take significantly longer since isolation of all nodes needs to be checked.\
+♻ `Area.xnp(exclude_isolated_nodes: bool = False) -> float` - returns a net position of the `Area.xnodes` calculated as sum of generation - sum of load. If *exclude_isolated_nodes* is *True*, np is calculated without isolated nodes, but this can take significantly longer since isolation of all nodes needs to be checked.\
 ♻ `Area.uct(trim: bool = False) -> str` - returns uct string for ##Z block of the area.
 
 ### 📚 `Node()`
@@ -187,7 +187,9 @@ True
 ♻ `Node.load_uct(UctText: str)` - loads Node parameters from uct text of the node.\
 ♻ `Node.load_from_regex_dictionary(regex_dictionary: dict)` - loads Node parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Node.load_uct()` method.\
 ♻ `Node.uct(trim: bool = False) - str` - returns uct text of the node. If trim is true, tracing spaces are stripped.
-♻ `Node.lines() -> list` - returns list of `Grid.lines` connected to the Node.
+♻ `Node.lines() -> list` - returns list of `Grid.lines` connected to the Node.\
+♻ `Node.transformers() -> list` - returns list of `Grid.transformers` connected to the Node.\
+♻ `Node.isolated() -> bool` - returns `True` when none connecting element is connected to the node or in operation i.e. node is isolated from the rest of the grid.
 
 ### 📚 `Line()`
 Dataclass for parameters of lines. All arguments are optional which means you can create an empty instance exactly the same as with [nodes](#-node).

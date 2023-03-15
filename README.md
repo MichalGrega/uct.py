@@ -186,7 +186,7 @@ True
 #### Methods
 ♻ `Node.load_uct(UctText: str)` - loads Node parameters from uct text of the node.\
 ♻ `Node.load_from_regex_dictionary(regex_dictionary: dict)` - loads Node parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Node.load_uct()` method.\
-♻ `Node.uct(trim: bool = False) - str` - returns uct text of the node. If trim is true, tracing spaces are stripped.
+♻ `Node.uct(trim: bool = False) - str` - returns uct text of the node. If trim is true, tracing spaces are stripped.\
 ♻ `Node.lines() -> list` - returns list of `Grid.lines` connected to the Node.\
 ♻ `Node.transformers() -> list` - returns list of `Grid.transformers` connected to the Node.\
 ♻ `Node.isolated() -> bool` - returns `True` when none connecting element is connected to the node or in operation i.e. node is isolated from the rest of the grid.

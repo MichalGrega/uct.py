@@ -189,7 +189,7 @@ class Area:
         nodes = self.nodes()
         lines = self.lines()
         transf = self.transformers()
-        return f"Area({self.code}, Nodes: {len(nodes) if nodes else 0}, Lines: {len(lines) if lines else 0}, Transformers: {len(transf) if transf else 0}, NP: {self.np():.2f}, XNP: {self.xnp():.2f})"
+        return f"Area({self.code}, Nodes: {len(nodes) if nodes else 0}, Lines: {len(lines) if lines else 0}, Transformers: {len(transf) if transf else 0})"
     
     def uct(self, trim: bool = False) -> str:
         return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes.values()]) + "\n"

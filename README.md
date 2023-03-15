@@ -182,12 +182,12 @@ True
 #### Properties
 ◼ `Node.voltage -> int` - returns voltage of the node based on the UCT voltage definition (according to 6th node code character).\
 ◼ `Node.id -> str` - returns id of the node which is basically equal to `Node.code`
-◼ `Node.lines -> list` - returns list of `Grid.lines` connected to the Node.
 
 #### Methods
 ♻ `Node.load_uct(UctText: str)` - loads Node parameters from uct text of the node.\
 ♻ `Node.load_from_regex_dictionary(regex_dictionary: dict)` - loads Node parameters from dictionary of parameters resulting from a regex search or other dictionary organized as {\<attribute name>__\<type>: value} where *type* is one of *str*, *int*, *float* and value is of *str* type. It is used by `Node.load_uct()` method.\
 ♻ `Node.uct(trim: bool = False) - str` - returns uct text of the node. If trim is true, tracing spaces are stripped.
+♻ `Node.lines() -> list` - returns list of `Grid.lines` connected to the Node.
 
 ### 📚 `Line()`
 Dataclass for parameters of lines. All arguments are optional which means you can create an empty instance exactly the same as with [nodes](#-node).

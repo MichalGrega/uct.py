@@ -243,7 +243,7 @@ class Node(Element):
     def id(self) -> str:
         return self.code
     
-    @property
+    
     def lines(self) -> list:
         return [
             line

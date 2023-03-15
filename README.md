@@ -99,12 +99,12 @@ dict_keys(['Node', 'Line', 'Regulation', 'Transformer', 'Parameter', 'Schedule']
 
 #### Properties
 ◼ `Grid.date -> datetime.datetime` - date timestamp created from Grid.filename attributes.\
-◼ `Grid.slack -> list` - returns a list of all global slack nodes in the `Grid.nodes` i. e. nodes that have `Node.node_type == 3`.
 
 #### Methods
 ♻ `Grid.uct(trim: bool = False, C: bool = True, N: bool = True, L: bool = True, T: bool = True, E: bool = True) -> str` - creates valid uct text of the Grid object.
 * `trim` - if true, tracing spaces are stripped.
-* `C`, `N`, `L`, `T`, `E` - if true, directive blocks are exported (C - comments, N - nodes, L - lines, T - transformers including regulations and special parameters, E - schedules)
+* `C`, `N`, `L`, `T`, `E` - if true, directive blocks are exported (C - comments, N - nodes, L - lines, T - transformers including regulations and special parameters, E - schedules).\
+◼ `Grid.slack() -> list` - returns a list of all global slack nodes in the `Grid.nodes` i. e. nodes that have `Node.node_type == 3`.
 
 ### 📚 `Area(area_code: str, grid_instance: Grid)`
 Class that holds several properties that group grid elements by their corresponding area.

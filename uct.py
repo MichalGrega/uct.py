@@ -192,7 +192,7 @@ class Area:
         return f"Area({self.code}, Nodes: {len(nodes) if nodes else 0}, Lines: {len(lines) if lines else 0}, Transformers: {len(transf) if transf else 0})"
     
     def uct(self, trim: bool = False) -> str:
-        return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes.values()]) + "\n"
+        return f"##Z{self.code}\n" + "\n".join([node.uct(trim) for node in self.nodes().values()]) + "\n"
 
 class Element():
     grid: Grid = None

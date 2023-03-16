@@ -53,6 +53,10 @@ class Grid:
                                  int(self.filename.minute),
                                  0)
 
+    @property
+    def file_basename(self):
+        return os.path.basename(self.file)
+
     def slack(self) -> list:
         return [node for node in self.nodes.values() if node.node_type == 3]
 

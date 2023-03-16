@@ -99,6 +99,7 @@ dict_keys(['Node', 'Line', 'Regulation', 'Transformer', 'Parameter', 'Schedule']
 
 #### Properties
 ◼ `Grid.date -> datetime.datetime` - date timestamp created from Grid.filename attributes.\
+◼ `Grid.file_basename -> str` - returns basename of the loaded uct file.\
 
 #### Methods
 ♻ `Grid.uct(trim: bool = False, C: bool = True, N: bool = True, L: bool = True, T: bool = True, E: bool = True) -> str` - creates valid uct text of the Grid object.
